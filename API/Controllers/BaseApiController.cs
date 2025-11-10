@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -7,5 +7,12 @@ namespace API.Controllers
     [ApiController]
     public class BaseApiController : ControllerBase
     {
+        protected readonly IMediator Mediator;
+
+    public BaseApiController(IMediator mediator)
+    {
+        Mediator = mediator ?? 
+            throw new ArgumentNullException(nameof(mediator), "IMediator service is required");
+    }
     }
 }
