@@ -9,6 +9,7 @@ export const useActivities = (id?: string) => {
       const response = await agent.get<Activity[]>("/activities");
       return response.data;
     },
+    staleTime: 1000 * 60 * 5,
   });
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
