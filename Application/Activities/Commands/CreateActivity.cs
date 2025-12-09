@@ -2,7 +2,6 @@ using System;
 using Application.Activities.DTOs;
 using AutoMapper;
 using Domain;
-using FluentValidation;
 using MediatR;
 using Persistence;
 
