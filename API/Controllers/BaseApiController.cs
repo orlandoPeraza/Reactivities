@@ -16,7 +16,7 @@ namespace API.Controllers
             throw new ArgumentNullException(nameof(mediator), "IMediator service is required");
     }
     
-    protected ActionResult<T> HandleResult<T>(Result<T> result)
+    protected ActionResult HandleResult<T>(Result<T> result)
     {
         if (result == null) return NotFound();
 
