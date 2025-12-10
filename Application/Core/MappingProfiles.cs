@@ -11,6 +11,9 @@ public class MappingProfiles : Profile
     {
         CreateMap<Activity, Activity>();
         CreateMap<CreateActivityDto, Activity>();
+        CreateMap<EditActivityDto, Activity>()
+        .ForAllMembers(opt => 
+        opt.Condition((src, dest, srcMember) => srcMember != null));
     }
 
 }
