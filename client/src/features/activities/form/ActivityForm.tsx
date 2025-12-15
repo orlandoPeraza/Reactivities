@@ -1,7 +1,7 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useActivities } from "../../../lib/hooks/useActivities";
 import { useParams } from "react-router";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { useEffect } from "react";
 import {
   activitySchema,
@@ -11,16 +11,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../../../app/shared/components/TextInput";
 import SelectInput from "../../../app/shared/components/SelectInput";
 import { categoryOptions } from "./CategoryOptions";
+import DateTimeInput from "../../../app/shared/components/DateTimeInput";
 
 export default function ActivityForm() {
   const { control, reset, handleSubmit } = useForm<ActivitySchema>({
     mode: "onTouched",
-    resolver: zodResolver(activitySchema),
+    resolver: zodResolver(activitySchema) as Resolver<ActivitySchema>,
     defaultValues: {
       title: "",
       description: "",
       category: "",
-      date: "",
+      date: new Date(),
       city: "",
       venue: "",
     },
@@ -30,7 +31,11 @@ export default function ActivityForm() {
     useActivities(id);
 
   useEffect(() => {
-    if (activity) reset(activity);
+    if (activity)
+      reset({
+        ...activity,
+        date: activity.date ? new Date(activity.date) : undefined,
+      });
   }, [activity, reset]);
 
   const onSubmit = (data: ActivitySchema) => {
@@ -65,7 +70,7 @@ export default function ActivityForm() {
           control={control}
           name="category"
         />
-        <TextInput label="Date" control={control} name="date" />
+        <DateTimeInput label="Date" control={control} name="date" />
         <TextInput label="City" control={control} name="city" />
         <TextInput label="Venue" control={control} name="venue" />
         <Box display="flex" justifyContent="end" gap={3}>
