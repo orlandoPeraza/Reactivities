@@ -22,6 +22,7 @@ export default function LocationInput<T extends FieldValues>(props: Props<T>) {
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<LocationIQSuggestion[]>([]);
   const [inputValue, setInputValue] = useState(field.value || "");
+  const apiKey = import.meta.env.VITE_LOCATIONIQ_API_KEY;
 
   useEffect(() => {
     if (field.value && typeof field.value === "object") {
@@ -31,8 +32,7 @@ export default function LocationInput<T extends FieldValues>(props: Props<T>) {
     }
   }, [field.value]);
 
-  const locationUrl =
-    "https://api.locationiq.com/v1/autocomplete?key=pk.30b9a236dce6aff82b2ed574498b1285&q=tower%20of%20lo%20&limit=5&dedupe=1&";
+  const locationUrl = `https://api.locationiq.com/v1/autocomplete?key=${apiKey}&limit=5&dedupe=1&`;
 
   const fetchSuggestions = useMemo(
     () =>
@@ -45,7 +45,7 @@ export default function LocationInput<T extends FieldValues>(props: Props<T>) {
 
         try {
           const res = await axios.get<LocationIQSuggestion[]>(
-            `${locationUrl}q=${query}`
+            `${locationUrl}q=${encodeURIComponent(query)}`
           );
           setSuggestions(res.data);
         } catch (error) {
