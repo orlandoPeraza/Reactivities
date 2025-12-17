@@ -40,3 +40,19 @@ export type LocationIQAddress = {
   city?: string;
   postcode?: string;
 };
+
+export type ActivityFormValues = {
+  title: string;
+  description: string;
+  category: string;
+  date: Date;
+  city?: string;
+  venue: string;
+  latitude?: number;
+  longitude?: number;
+};
+
+type UpdateActivityPayload = {
+  id: string;
+  data: ActivityFormValues;
+};
