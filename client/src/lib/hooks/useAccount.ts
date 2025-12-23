@@ -49,9 +49,9 @@ export const useAccount = () => {
       return response.data;
     },
     enabled:
-      (!queryClient.getQueryData(["user"]) &&
-        location.pathname.startsWith("/activities")) ||
-      location.pathname.startsWith("/profile"),
+      !queryClient.getQueryData(["user"]) &&
+      location.pathname !== "/logoin" &&
+      location.pathname !== "/register",
   });
 
   return {
