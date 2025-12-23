@@ -16,7 +16,7 @@ export default function NotFound() {
     >
       <SearchOff sx={{ fontSize: 100 }} color="primary" />
       <Typography gutterBottom variant="h3">
-        Opps - we could not find what you are looking for
+        Oops - we could not find what you are looking for
       </Typography>
       <Button fullWidth component={Link} to="/activities">
         Return to the activities page
