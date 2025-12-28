@@ -5,7 +5,7 @@ using Application.Core;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
-using Infrastructure;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
