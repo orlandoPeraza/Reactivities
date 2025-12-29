@@ -19,6 +19,15 @@ export const useActivities = (id?: string) => {
     },
     enabled: !!currentUser,
     staleTime: 1000 * 60 * 5,
+    select: (data) => {
+      return data.map((activity) => {
+        return {
+          ...activity,
+          isHost: currentUser?.id === activity.hostId,
+          isGoing: activity.attendees.some((x) => x.id === currentUser?.id),
+        };
+      });
+    },
   });
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
@@ -28,6 +37,13 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     enabled: !!id && !!currentUser,
+    select: (data) => {
+      return {
+        ...data,
+        isHost: currentUser?.id === data.hostId,
+        isGoing: data.attendees.some((x) => x.id === currentUser?.id),
+      };
+    },
   });
 
   const updateActivity = useMutation({
