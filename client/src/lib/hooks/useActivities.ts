@@ -84,10 +84,55 @@ export const useActivities = (id?: string) => {
     mutationFn: async (id: string) => {
       await agent.post(`/activities/${id}/attend`);
     },
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["activities", id],
-      });
+    onMutate: async (activityId: string) => {
+      await queryClient.cancelQueries({ queryKey: ["activities", activityId] });
+
+      const prevActivity = queryClient.getQueryData<Activity>([
+        "activities",
+        activityId,
+      ]);
+
+      queryClient.setQueryData<Activity>(
+        ["activities", activityId],
+        (oldActivity) => {
+          if (!oldActivity || !currentUser) {
+            return oldActivity;
+          }
+
+          const isHost = oldActivity.hostId === currentUser.id;
+          const isAttending = oldActivity.attendees.some(
+            (x) => x.id === currentUser.id
+          );
+
+          return {
+            ...oldActivity,
+            isCancelled: isHost
+              ? !oldActivity.isCancelled
+              : oldActivity.isCancelled,
+            attendees: isAttending
+              ? isHost
+                ? oldActivity.attendees
+                : oldActivity.attendees.filter((x) => x.id !== currentUser.id)
+              : [
+                  ...oldActivity.attendees,
+                  {
+                    id: currentUser.id,
+                    displayName: currentUser.displayName,
+                    imageUrl: currentUser.imageUrl,
+                  },
+                ],
+          };
+        }
+      );
+      return { prevActivity };
+    },
+    onError: (_error, activityId, context) => {
+      if (context?.prevActivity) {
+        queryClient.setQueryData(
+          ["activities", activityId],
+          context.prevActivity
+        );
+      }
     },
   });
 
