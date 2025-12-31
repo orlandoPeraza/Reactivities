@@ -1,5 +1,6 @@
 using Application.Profiles.Commands;
 using Application.Profiles.DTOs;
+using Application.Profiles.Queries;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,12 @@ namespace API.Controllers
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
             return HandleResult(await Mediator.Send(new AddPhoto.Command{File = file}));
+        }
+
+        [HttpGet("{userId}/photos")]
+        public async Task<ActionResult<List<PhotoDto>>> GetPhotosForUser(string userId)
+        {
+            return HandleResult(await Mediator.Send(new GetProfilePhotos.Query{UserId = userId}));
         }
     }
 }
