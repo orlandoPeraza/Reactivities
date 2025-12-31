@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\" />
+    <Folder Include="Profiles\Commands\" />
   </ItemGroup>
 
   <ItemGroup>
