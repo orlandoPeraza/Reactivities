@@ -9,7 +9,7 @@ public class Photo
     public required string PublicId { get; set; }
     
     //Navigation properties
-    public required string USerId { get; set; }
+    public required string UserId { get; set; }
     public User User { get; set; } = null!;
 
 }
