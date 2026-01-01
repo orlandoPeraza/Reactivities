@@ -38,5 +38,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new SetMainPhoto.Command{PhotoId = photoId}));
         }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<UserProfileDto>> GetProfile(string userId)
+        {
+            return HandleResult(await Mediator.Send(new GetProfile.Query{UserId = userId}));
+        }
     }
 }
