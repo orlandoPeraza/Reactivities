@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { Profile } from "../types";
+import type { Photo, Profile } from "../types";
 import agent from "../api/agent";
 
 export const useProfile = (id?: string) => {
@@ -10,8 +10,19 @@ export const useProfile = (id?: string) => {
       return response.data;
     },
   });
+
+  const { data: photos, isLoading: loadingPhotos } = useQuery<Photo[]>({
+    queryKey: ["photos", id],
+    queryFn: async () => {
+      const response = await agent.get<Photo[]>(`/profiles/${id}/photos`);
+      return response.data;
+    },
+  });
+
   return {
     profile,
     loadingProfile,
+    photos,
+    loadingPhotos,
   };
 };
