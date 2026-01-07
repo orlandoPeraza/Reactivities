@@ -12,12 +12,19 @@ import PhotoUploadWidget from "../../app/shared/components/PhotoUploadWidget";
 
 export default function ProfilePhotos() {
   const { id } = useParams();
-  const { photos, loadingPhotos, isCurrentUser } = useProfile(id);
+  const { photos, loadingPhotos, isCurrentUser, uploadPhoto } = useProfile(id);
   const [editMode, setEditMode] = useState(false);
 
+  const handlePhotoUpload = (file: Blob) => {
+    uploadPhoto.mutate(file, {
+      onSuccess: () => {
+        setEditMode(false);
+      },
+    });
+  };
+
   if (loadingPhotos) return <Typography>Loading photos...</Typography>;
-  if (!photos || photos.length === 0)
-    return <Typography>No photos found for this user</Typography>;
+  if (!photos) return <Typography>No photos found for this user</Typography>;
 
   return (
     <Box>
@@ -29,7 +36,10 @@ export default function ProfilePhotos() {
         </Box>
       )}
       {editMode ? (
-        <PhotoUploadWidget />
+        <PhotoUploadWidget
+          uploadPhoto={handlePhotoUpload}
+          loading={uploadPhoto.isPending}
+        />
       ) : (
         <ImageList sx={{ height: 450 }} cols={6} rowHeight={164}>
           {photos.map((item) => (
@@ -37,11 +47,11 @@ export default function ProfilePhotos() {
               <img
                 srcSet={`${item.url.replace(
                   "/upload/",
-                  "/upload/w_164,h_164,c_crop,f_auto,dpr_2,g_face/"
+                  "/upload/w_164,h_164,c_fill,f_auto,dpr_2,g_face/"
                 )}`}
                 src={`${item.url.replace(
                   "/upload/",
-                  "/upload/w_164,h_164,c_crop,f_auto,g_face/"
+                  "/upload/w_164,h_164,c_fill,f_auto,g_face/"
                 )}`}
                 alt={"user profile image"}
                 loading="lazy"
