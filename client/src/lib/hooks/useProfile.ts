@@ -53,6 +53,48 @@ export const useProfile = (id?: string) => {
     },
   });
 
+  const setMainPhoto = useMutation({
+    mutationFn: async (photo: Photo) => {
+      await agent.put(`/profiles/${photo.id}/setMain`);
+    },
+    onMutate: async (photo: Photo) => {
+      await queryClient.cancelQueries({ queryKey: ["user"] });
+      await queryClient.cancelQueries({ queryKey: ["profile", id] });
+
+      const previousUser = queryClient.getQueryData<User>(["user"]);
+      const previousProfile = queryClient.getQueryData<Profile>([
+        "profile",
+        id,
+      ]);
+
+      queryClient.setQueryData<User>(["user"], (userData) => {
+        if (!userData) return userData;
+        return {
+          ...userData,
+          imageUrl: photo.url,
+        };
+      });
+
+      queryClient.setQueryData<Profile>(["profile", id], (profile) => {
+        if (!profile) return profile;
+        return {
+          ...profile,
+          imageUrl: photo.url,
+        };
+      });
+
+      return { previousUser, previousProfile };
+    },
+    onError: (_err, _photo, context) => {
+      if (context?.previousUser) {
+        queryClient.setQueryData(["user"], context.previousUser);
+      }
+      if (context?.previousProfile) {
+        queryClient.setQueryData(["profile", id], context.previousProfile);
+      }
+    },
+  });
+
   const isCurrentUser = useMemo(() => {
     return id === queryClient.getQueryData<User>(["user"])?.id;
   }, [id, queryClient]);
@@ -64,5 +106,6 @@ export const useProfile = (id?: string) => {
     loadingPhotos,
     isCurrentUser,
     uploadPhoto,
+    setMainPhoto,
   };
 };
