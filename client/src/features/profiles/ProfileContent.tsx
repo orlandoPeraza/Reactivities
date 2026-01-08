@@ -1,6 +1,7 @@
 import { Box, Paper, Tab, Tabs } from "@mui/material";
 import { useState, type SyntheticEvent } from "react";
 import ProfilePhotos from "./ProfilePhotos";
+import ProfileAbout from "./ProfileAbout";
 
 export default function ProfileContent() {
   const [value, setValue] = useState(0);
@@ -9,7 +10,7 @@ export default function ProfileContent() {
     setValue(newValue);
   };
   const tabContent = [
-    { label: "About", content: <div>About</div> },
+    { label: "About", content: <ProfileAbout /> },
     { label: "Photos", content: <ProfilePhotos /> },
     { label: "Events", content: <div>Events</div> },
     { label: "Followers", content: <div>Followers</div> },
@@ -34,7 +35,7 @@ export default function ProfileContent() {
           <Tab key={index} label={tab.label} sx={{ mr: 3 }} />
         ))}
       </Tabs>
-      <Box sx={{ flexGrow: 1, p: 3 }}>{tabContent[value].content}</Box>
+      <Box sx={{ flexGrow: 1, p: 3, pt: 0 }}>{tabContent[value].content}</Box>
     </Box>
   );
 }
