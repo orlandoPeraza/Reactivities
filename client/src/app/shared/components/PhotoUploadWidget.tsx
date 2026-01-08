@@ -1,6 +1,6 @@
 import { CloudUpload } from "@mui/icons-material";
 import { Box, Button, Grid2, Typography } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Cropper, { type ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
@@ -13,6 +13,12 @@ type Props = {
 export default function PhotoUploadWidget({ uploadPhoto, loading }: Props) {
   const [files, setFiles] = useState<object & { preview: string }[]>([]);
   const cropperRef = useRef<ReactCropperElement>(null);
+
+  useEffect(() => {
+    return () => {
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
+    };
+  }, [files]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles(
@@ -82,7 +88,7 @@ export default function PhotoUploadWidget({ uploadPhoto, loading }: Props) {
               style={{ width: 300, height: 300, overflow: "hidden" }}
             />
             <Button
-              sx={{ mt: 2 }}
+              sx={{ my: 1, width: 300 }}
               onClick={onCrop}
               variant="contained"
               color="secondary"
