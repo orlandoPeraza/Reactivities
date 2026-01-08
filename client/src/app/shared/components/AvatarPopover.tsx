@@ -47,7 +47,17 @@ export default function AvatarPopover({ profile }: Props) {
           horizontal: "left",
         }}
         onClose={handlePopoverClose}
+        disableAutoFocus
+        disableEnforceFocus
         disableRestoreFocus
+        slotProps={{
+          paper: {
+            sx: {
+              width: 300,
+              height: 353,
+            },
+          },
+        }}
       >
         <ProfileCard profile={profile} />
       </Popover>
