@@ -6,9 +6,13 @@ import {
   TextField,
   Avatar,
 } from "@mui/material";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
+import { useComments } from "../../../lib/hooks/useComments";
+import { timeAgo } from "../../../lib/util/util";
 
 export default function ActivityDetailsChat() {
+  const { id } = useParams();
+  const { commentStore } = useComments(id);
   return (
     <>
       <Box
@@ -35,33 +39,35 @@ export default function ActivityDetailsChat() {
             </form>
           </div>
 
-          <Box>
-            <Box sx={{ display: "flex", my: 2 }}>
-              <Avatar
-                src={"/images/user.png"}
-                alt={"user image"}
-                sx={{ mr: 2 }}
-              />
-              <Box display="flex" flexDirection="column">
-                <Box display="flex" alignItems="center" gap={3}>
-                  <Typography
-                    component={Link}
-                    to={`/profiles/username`}
-                    variant="subtitle1"
-                    sx={{ fontWeight: "bold", textDecoration: "none" }}
-                  >
-                    Bob
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    2 hours ago
+          <Box sx={{ height: 400, overflow: "auto" }}>
+            {commentStore.comments.map((comment) => (
+              <Box key={comment.id} sx={{ display: "flex", my: 2 }}>
+                <Avatar
+                  src={comment.imageUrl}
+                  alt={"user image"}
+                  sx={{ mr: 2 }}
+                />
+                <Box display="flex" flexDirection="column">
+                  <Box display="flex" alignItems="center" gap={3}>
+                    <Typography
+                      component={Link}
+                      to={`/profiles/${comment.userId}`}
+                      variant="subtitle1"
+                      sx={{ fontWeight: "bold", textDecoration: "none" }}
+                    >
+                      {comment.displayName}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {timeAgo(comment.createdAt)}
+                    </Typography>
+                  </Box>
+
+                  <Typography sx={{ whiteSpace: "pre-wrap" }}>
+                    {comment.body}
                   </Typography>
                 </Box>
-
-                <Typography sx={{ whiteSpace: "pre-wrap" }}>
-                  Comment goes here
-                </Typography>
               </Box>
-            </Box>
+            ))}
           </Box>
         </CardContent>
       </Card>
