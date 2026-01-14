@@ -1,4 +1,5 @@
 using API.Middleware;
+using API.SignalR;
 using Application.Activities.Queries;
 using Application.Activities.Validators;
 using Application.Core;
@@ -27,6 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
+builder.Services.AddSignalR();
 builder.Services.AddMediatR(x =>{
     x.RegisterServicesFromAssemblyContaining<GetActivityList.Handler>();
     x.AddOpenBehavior(typeof(ValidationBehavior<,>));
@@ -77,6 +79,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<User>();
+app.MapHub<CommentHub>("/comments");
+
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
