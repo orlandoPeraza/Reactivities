@@ -22,6 +22,9 @@ export type Profile = {
   displayName: string;
   bio?: string;
   imageUrl?: string;
+  followersCount?: number;
+  followingsCount?: number;
+  following?: boolean;
 };
 
 export type Photo = {
