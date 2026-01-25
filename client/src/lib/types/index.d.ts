@@ -1,3 +1,8 @@
+export type PagedList<T, TCursor> = {
+  items: T[];
+  nextCursor: TCursor;
+};
+
 export type Activity = {
   id: string;
   title: string;
