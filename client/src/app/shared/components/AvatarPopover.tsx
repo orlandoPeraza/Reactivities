@@ -57,8 +57,9 @@ export default function AvatarPopover({ profile }: Props) {
         slotProps={{
           paper: {
             sx: {
-              width: 300,
-              height: 353,
+              width: 250,
+              height: 340,
+              overflow: "hidden",
             },
           },
         }}
