@@ -57,16 +57,42 @@ export default function ProfileActivities() {
                 to={`/activities/${activity.id}`}
                 style={{ textDecoration: "none" }}
               >
-                <Card elevation={4}>
+                <Card
+                  elevation={4}
+                  sx={{
+                    height: 220,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
                   <CardMedia
-                    component="img"
-                    height="100"
-                    image={`/images/categoryImages/${activity.category}.jpg`}
-                    alt={activity.title}
-                    sx={{ objectFit: "cover" }}
+                    component="div"
+                    sx={{
+                      aspectRatio: "16 / 9",
+                      backgroundImage: `url(/images/categoryImages/${activity.category}.jpg)`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
                   />
-                  <CardContent>
-                    <Typography variant="h6" textAlign="center" mb={1}>
+                  <CardContent
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      textAlign="center"
+                      mb={1}
+                      sx={{
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                      }}
+                    >
                       {activity.title}
                     </Typography>
                     <Typography
