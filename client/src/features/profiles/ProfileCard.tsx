@@ -19,9 +19,12 @@ export default function ProfileCard({ profile }: Props) {
     <Link to={`/profiles/${profile.id}`} style={{ textDecoration: "none" }}>
       <Card
         sx={{
+          p: 2,
+          width: 250,
+          height: 340,
+          display: "flex",
+          flexDirection: "column",
           borderRadius: 3,
-          p: 3,
-          maxWidth: 250,
           textDecoration: "none",
         }}
         elevation={4}
@@ -37,16 +40,18 @@ export default function ProfileCard({ profile }: Props) {
           }}
           alt={profile.displayName + "image"}
         />
-        <CardContent>
+        <CardContent sx={{ flexGrow: 1 }}>
           <Box display="flex" flexDirection={"column"} gap={1}>
             <Typography variant="h5">{profile.displayName}</Typography>
             {profile.bio && (
               <Typography
                 variant="body2"
                 sx={{
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
                   whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
                 }}
               >
                 {profile.bio}
