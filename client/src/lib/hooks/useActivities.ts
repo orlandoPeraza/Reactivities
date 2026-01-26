@@ -1,4 +1,5 @@
 import {
+  keepPreviousData,
   useInfiniteQuery,
   useMutation,
   useQuery,
@@ -12,8 +13,12 @@ import type {
   UpdateActivityPayload,
 } from "../types";
 import { useAccount } from "./useAccount";
+import { useStore } from "./useStore";
 
 export const useActivities = (id?: string) => {
+  const {
+    activityStore: { filter, startDate },
+  } = useStore();
   const queryClient = useQueryClient();
   const { currentUser } = useAccount();
 
@@ -24,7 +29,7 @@ export const useActivities = (id?: string) => {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery<PagedList<Activity, string>>({
-    queryKey: ["activities"],
+    queryKey: ["activities", filter, startDate],
     queryFn: async ({ pageParam = null }) => {
       const response = await agent.get<PagedList<Activity, string>>(
         "/activities",
@@ -32,12 +37,15 @@ export const useActivities = (id?: string) => {
           params: {
             cursor: pageParam,
             pageSize: 3,
+            filter,
+            startDate,
           },
         },
       );
       return response.data;
     },
     initialPageParam: null,
+    placeholderData: keepPreviousData,
     getNextPageParam: (lastPage) => lastPage.nextCursor,
     enabled: !!currentUser,
     staleTime: 1000 * 60 * 5,
