@@ -22,12 +22,12 @@ agent.interceptors.request.use(
   (error) => {
     store.uiStore.stopLoading();
     return Promise.reject(error);
-  }
+  },
 );
 
 agent.interceptors.response.use(
   async (response) => {
-    await sleep(1000);
+    if (import.meta.env.DEV) await sleep(1000);
     store.uiStore.stopLoading();
     return response;
   },
@@ -62,7 +62,7 @@ agent.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default agent;
