@@ -28,5 +28,3 @@ dist-ssr
 .env.*
 !.env.example
 
-# Build
-API/wwwroot/*
