@@ -2,8 +2,11 @@ import { CalendarToday, Info, Place } from "@mui/icons-material";
 import { Box, Button, Divider, Grid2, Paper, Typography } from "@mui/material";
 import { formatDate } from "../../../lib/util/util";
 import type { Activity } from "../../../lib/types";
-import { useState } from "react";
-import MapComponent from "../../../app/shared/components/MapComponent";
+import { Suspense, useState } from "react";
+import React from "react";
+const MapComponent = React.lazy(
+  () => import("../../../app/shared/components/MapComponent"),
+);
 
 type Props = { activity: Activity };
 export default function ActivityDetailsInfo({ activity }: Props) {
@@ -52,10 +55,12 @@ export default function ActivityDetailsInfo({ activity }: Props) {
       </Grid2>
       {mapOpen && (
         <Box sx={{ height: 400, zIndex: 1000, display: "block" }}>
-          <MapComponent
-            position={[activity.latitude, activity.longitude]}
-            venue={activity.venue}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <MapComponent
+              position={[activity.latitude, activity.longitude]}
+              venue={activity.venue}
+            />
+          </Suspense>
         </Box>
       )}
     </Paper>
